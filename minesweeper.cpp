@@ -1,25 +1,37 @@
 #include <iostream>
 #include <vector>
+#include <random>
 using namespace std;
 
-vector <vector <bool> > makeboard(int width, int height);
+vector <vector <bool> > makeboard(int width, int height, int mines);
 void printboard (vector <vector <bool> > &board);
 
 int main (int argc, char** argv)
 {
-  srand(time(0));
-  vector <vector <bool> > board = makeboard(5, 5);
+  vector <vector <bool> > board = makeboard(4, 5, 3);
   printboard(board);
 }
 
-vector <vector <bool> > makeboard(int width, int height)
+vector <vector <bool> > makeboard(int width, int height, int mines)
 {
-  vector <vector <bool> > board(width, vector<bool>(height));
-  for (int i = 0; i < width; i++)
+  random_device device;
+  mt19937 generator(device());
+  uniform_real_distribution<> distribution(0.0, 1.0);
+
+  int count = 0;
+  float remaining = width * height;
+
+  vector <vector <bool> > board(height, vector<bool>(width));
+  for (int i = 0; i < board.size(); i++)
   {
-    for (int j = 0; j < height; j++)
+    for (int j = 0; j < board[i].size(); j++)
     {
-      board[i][j] = rand() % 2;
+      if (distribution(generator) < (mines - count) / remaining)
+      {
+        board[i][j] = true;
+        count++;
+      }
+      remaining--;
     }
   }
   return board;
