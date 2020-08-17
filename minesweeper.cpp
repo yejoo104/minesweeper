@@ -4,7 +4,7 @@
 #include <string>
 using namespace std;
 
-vector <vector <bool> > makeboard(int width, int height, int mines);
+vector <vector <bool> > makeboard(int width, int height, int mines, int row, int column);
 void printboard (vector <vector <int> > &board);
 
 int main (int argc, char** argv)
@@ -51,13 +51,16 @@ int main (int argc, char** argv)
     }
   }
 
-  vector <vector <bool> > mineboard = makeboard(width, height, mines);
-  vector <vector <int> > tracker (height, vector<int> (width, -1));
+  string firstcoordinates;
+  cout << "Input coordinates, row first and then space and then column. (ex: 4 2)" << endl;
+  cin >> firstcoordinates;
+  int firstrow = firstcoordinates[0] - '0' - 1;
+  int firstcolumn = firstcoordinates[0] - '0' - 1;
 
-  printboard(tracker); 
+  vector <vector <bool> > mineboard = makeboard(width, height, mines, firstrow, firstcolumn);
 }
 
-vector <vector <bool> > makeboard(int width, int height, int mines)
+vector <vector <bool> > makeboard(int width, int height, int mines, int row, int column)
 {
   random_device device;
   mt19937 generator(device());
