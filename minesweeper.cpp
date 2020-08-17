@@ -64,24 +64,28 @@ vector <vector <bool> > makeboard(int width, int height, int mines, int row, int
 {
   random_device device;
   mt19937 generator(device());
-  uniform_real_distribution<> distribution(0.0, 1.0);
+  uniform_int_distribution<> widthdis(0, width - 1);
+  uniform_int_distribution<> heightdis(0, height - 1);
 
   int count = 0;
   float remaining = width * height;
 
   vector <vector <bool> > board(height, vector<bool>(width));
-  for (int i = 0; i < board.size(); i++)
+
+  while (count < mines)
   {
-    for (int j = 0; j < board[i].size(); j++)
+    int thisrow = heightdis(generator);
+    int thiscolumn = widthdis(generator);
+
+    if (thisrow == row && thiscolumn == column) continue;
+
+    if (!board[thisrow][thiscolumn])
     {
-      if (distribution(generator) < (mines - count) / remaining)
-      {
-        board[i][j] = true;
-        count++;
-      }
-      remaining--;
+      board[thisrow][thiscolumn] = true;
+      count++;
     }
   }
+
   return board;
 }
 
