@@ -2,6 +2,7 @@
 #include <vector>
 #include <random>
 #include <string>
+#include <queue>
 using namespace std;
 
 vector <vector <bool> > makeboard(int width, int height, int mines, int row, int column);
@@ -9,12 +10,17 @@ void printboard (vector <vector <int> > &board);
 vector <vector <int> > updatetracker(vector < vector <int> > tracker, vector <vector <bool> > mineboard, int row, int column);
 int around(vector <vector <bool> > mineboard, int row, int column);
 void printarray (vector <vector <bool> > board);
+void printarray (vector <vector <int> > board);
 
 int main (int argc, char** argv)
 {
   vector <vector <bool> > board = makeboard(6, 7, 8, 3, 2);
   printarray(board);
-  cout << around(board, 2, 4) << endl;
+  cout << endl;
+
+  vector <vector <int> > tracker(7, vector<int>(6, -1));
+  tracker = updatetracker(tracker, board, 3, 2);
+  printboard(tracker);
 
   /*
   string level;
@@ -126,7 +132,34 @@ void printboard (vector <vector <int> > &board)
 
 vector <vector <int> > updatetracker(vector < vector <int> > tracker, vector <vector <bool> > mineboard, int row, int column)
 {
+  queue <vector <int> > myqueue;
+  myqueue.push({row, column});
+  while (!myqueue.empty())
+  {
+    vector <int> coordinates = myqueue.front();
+    myqueue.pop();
+    int minesnearby = around(mineboard, coordinates[0], coordinates[1]);
+    tracker[coordinates[0]][coordinates[1]] = minesnearby;
 
+    if (minesnearby == 0)
+    {
+      for (int i = -1; i <= 1; i++)
+      {
+        if(coordinates[0] + i >= 0 && coordinates[0] + i < mineboard.size())
+        {
+          for (int j = -1; j <= 1; j++)
+          {
+            if(coordinates[1] + j >= 0 && coordinates[1] + j < mineboard[0].size() && tracker[coordinates[0] + i][coordinates[1] + j] == -1)
+            {
+              myqueue.push({coordinates[0] + i, coordinates[1] + j});
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return tracker;
 }
 
 int around(vector <vector <bool> > mineboard, int row, int column)
@@ -150,6 +183,18 @@ int around(vector <vector <bool> > mineboard, int row, int column)
 }
 
 void printarray (vector <vector <bool> > board)
+{
+  for (int i = 0; i < board.size(); i++)
+  {
+    for(int j = 0; j < board[i].size(); j++)
+    {
+      cout << board[i][j] << " ";
+    }
+    cout << endl;
+  }
+}
+
+void printarray (vector <vector <int> > board)
 {
   for (int i = 0; i < board.size(); i++)
   {
