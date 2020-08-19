@@ -14,15 +14,6 @@ void printarray (vector <vector <int> > board);
 
 int main (int argc, char** argv)
 {
-  vector <vector <bool> > board = makeboard(6, 7, 8, 3, 2);
-  printarray(board);
-  cout << endl;
-
-  vector <vector <int> > tracker(7, vector<int>(6, -1));
-  tracker = updatetracker(tracker, board, 3, 2);
-  printboard(tracker);
-
-  /*
   string level;
   int width;
   int height;
@@ -66,16 +57,36 @@ int main (int argc, char** argv)
 
   }
 
-  string firstcoordinates;
-  cout << "Input coordinates, row first and then space and then column. (ex: 4 2)" << endl;
-  cin >> firstcoordinates;
-  int firstrow = firstcoordinates[0] - '0' - 1;
-  int firstcolumn = firstcoordinates[0] - '0' - 1;
-
-  vector <vector <bool> > mineboard = makeboard(width, height, mines, firstrow, firstcolumn);
   vector <vector <int> > tracker(height, vector<int>(width, -1));
   printboard(tracker);
-  */
+
+  int row;
+  int col;
+  cout << "Input coordinates, row first and then space and then column. (ex: 4 2)" << endl;
+  cin >> row >> col;
+  row--;
+  col--;
+
+  vector <vector <bool> > mineboard = makeboard(width, height, mines, row, col);
+
+  tracker = updatetracker(tracker, mineboard, row, col);
+  printboard(tracker);
+
+  while(true)
+  {
+    cout << "Input coordinates, row first and then space and then column. (ex: 4 2)" << endl;
+    cin >> row >> col;
+    row--;
+    col--;
+
+    if (mineboard[row][col])
+    {
+      cout << "That's a mine!" << endl;
+      break;
+    }
+
+    tracker = updatetracker(tracker, mineboard, row, col);
+  }
 }
 
 vector <vector <bool> > makeboard(int width, int height, int mines, int row, int column)
