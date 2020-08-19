@@ -9,6 +9,7 @@ vector <vector <bool> > makeboard(int width, int height, int mines, int row, int
 void printboard (vector <vector <int> > &board);
 vector <vector <int> > updatetracker(vector < vector <int> > tracker, vector <vector <bool> > mineboard, int row, int column);
 int around(vector <vector <bool> > mineboard, int row, int column);
+void printfinal (vector <vector <bool> > board, vector <vector <int> > tracker);
 void printarray (vector <vector <bool> > board);
 void printarray (vector <vector <int> > board);
 
@@ -88,6 +89,8 @@ int main (int argc, char** argv)
     tracker = updatetracker(tracker, mineboard, row, col);
     printboard(tracker);
   }
+
+  printfinal(mineboard, tracker);
 }
 
 vector <vector <bool> > makeboard(int width, int height, int mines, int row, int column)
@@ -193,6 +196,22 @@ int around(vector <vector <bool> > mineboard, int row, int column)
 
   return count - mineboard[row][column];
 }
+
+void printfinal (vector <vector <bool> > board, vector <vector <int> > tracker)
+{
+  for (int i = 0; i < board.size(); i++)
+  {
+    for (int j = 0; j < board[i].size(); j++)
+    {
+      if (board[i][j]) cout << "* ";
+      else if (tracker[i][j] == -1) cout << "? ";
+      else if (tracker[i][j] == 0) cout << "_ ";
+      else cout << tracker[i][j] << " ";
+    }
+    cout << endl;
+  }
+}
+
 
 void printarray (vector <vector <bool> > board)
 {
