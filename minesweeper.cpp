@@ -86,6 +86,7 @@ int main (int argc, char** argv)
     }
 
     tracker = updatetracker(tracker, mineboard, row, col);
+    printboard(tracker);
   }
 }
 
