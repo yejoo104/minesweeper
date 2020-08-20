@@ -6,7 +6,7 @@
 using namespace std;
 
 vector <vector <bool> > makeboard(int width, int height, int mines, int row, int column);
-void printboard (vector <vector <int> > &board);
+bool printboard (vector <vector <int> > &board, int mines = 0);
 vector <vector <int> > updatetracker(vector < vector <int> > tracker, vector <vector <bool> > mineboard, int row, int column);
 int around(vector <vector <bool> > mineboard, int row, int column);
 void printfinal (vector <vector <bool> > board, vector <vector <int> > tracker);
@@ -71,9 +71,8 @@ int main (int argc, char** argv)
   vector <vector <bool> > mineboard = makeboard(width, height, mines, row, col);
 
   tracker = updatetracker(tracker, mineboard, row, col);
-  printboard(tracker);
 
-  while(true)
+  while(!printboard(tracker, mines))
   {
     cout << "Input coordinates, row first and then space and then column. (ex: 4 2)" << endl;
     cin >> row >> col;
@@ -83,13 +82,13 @@ int main (int argc, char** argv)
     if (mineboard[row][col])
     {
       cout << "That's a mine!" << endl;
-      break;
+      printfinal(mineboard, tracker);
+      return 0;
     }
 
     tracker = updatetracker(tracker, mineboard, row, col);
-    printboard(tracker);
   }
-
+  cout << "You won!" << endl;
   printfinal(mineboard, tracker);
 }
 
@@ -122,8 +121,9 @@ vector <vector <bool> > makeboard(int width, int height, int mines, int row, int
   return board;
 }
 
-void printboard (vector <vector <int> > &board)
+bool printboard (vector <vector <int> > &board, int mines)
 {
+  int count = 0;
   for (int i = 0; i < board.size(); i++)
   {
     for (int j = 0; j < board[i].size(); j++)
@@ -131,6 +131,7 @@ void printboard (vector <vector <int> > &board)
       if (board[i][j] == -1)
       {
         cout << "? ";
+        count++;
       }
       else if (board[i][j] == 0)
       {
@@ -143,6 +144,8 @@ void printboard (vector <vector <int> > &board)
     }
     cout << endl;
   }
+
+  return count == mines;
 }
 
 vector <vector <int> > updatetracker(vector < vector <int> > tracker, vector <vector <bool> > mineboard, int row, int column)
