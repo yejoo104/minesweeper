@@ -1,5 +1,4 @@
 minesweeper: minesweeper.cpp
 	g++ -std=c++17 -o minesweeper minesweeper.cpp
-test: test.cpp
-	g++ -std=c++17 -o test test.cpp
-
+minesweeper2: minesweeper2.cpp
+	g++ -std=c++17 -o minesweeper2 minesweeper2.cpp -lsfml-graphics -lsfml-window -lsfml-system
