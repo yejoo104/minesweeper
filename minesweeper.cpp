@@ -86,6 +86,12 @@ int main (int argc, char** argv)
       return 0;
     }
 
+    if (tracker[row][col] != -1)
+    {
+      cout << "You've already revealed that grid!" << endl;
+      continue;
+    }
+
     tracker = updatetracker(tracker, mineboard, row, col);
   }
   cout << "You won!" << endl;
@@ -123,6 +129,7 @@ vector <vector <bool> > makeboard(int width, int height, int mines, int row, int
 
 bool printboard (vector <vector <int> > &board, int mines)
 {
+  cout << "Board:\n";
   int count = 0;
   for (int i = 0; i < board.size(); i++)
   {
@@ -202,6 +209,7 @@ int around(vector <vector <bool> > mineboard, int row, int column)
 
 void printfinal (vector <vector <bool> > board, vector <vector <int> > tracker)
 {
+  cout << "Mine Locations:\n";
   for (int i = 0; i < board.size(); i++)
   {
     for (int j = 0; j < board[i].size(); j++)
