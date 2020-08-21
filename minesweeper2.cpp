@@ -2,49 +2,42 @@
 #include <iostream>
 #include <string>
 #include <vector>
+using namespace sf;
 using namespace std;
 
 int main()
 {
   string level;
-  int width;
-  int height;
-  int mines;
+  int width = 10;
+  int height = 10;
+  int mines = 10;
 
-  while (true)
+  int w = 32;
+  Texture t;
+  t.loadFromFile("tiles.jpg");
+  Sprite s(t);
+
+  RenderWindow app(VideoMode(w * width, w * height), "Minesweeper");
+
+  // Display Board before Game Starts
+  while (app.isOpen())
   {
-    cout << "Type in B for Beginner (10x10 with 10 mines), I for Intermediate(16x16 with 40 mines), E for Expert(30x16 with 99 mines), and C for Custom Size." << endl;
-    cin >> level;
-    if (level == "B")
+    Event e;
+    while (app.pollEvent(e))
     {
-      width = 10;
-      height = 10;
-      mines = 10;
-      break;
+      if (e.type == Event::Closed) app.close();
     }
-    if (level == "I")
-    {
-      width = 16;
-      height = 16;
-      mines = 40;
-      break;
-    }
-    if (level == "E")
-    {
-      width = 30;
-      height = 16;
-      mines = 99;
-      break;
-    }
-    if (level == "C")
-    {
-      cout << "Type in custom width." << endl;
-      cin >> width;
-      cout << "Type in custom height." << endl;
-      cin >> height;
-      cout << "Type in custom number of mines." << endl;
-      cin >> mines;
-      break;
-    }
+
+    for (int i = 0; i <= height;i++)
+      for (int j = 0; j <= width; j++)
+      {
+        s.setTextureRect(IntRect(10 * w, 0, w, w));
+        s.setPosition(i * w, j * w);
+        app.draw(s);
+      }
+
+    app.display();
   }
+
+  // First Click
 }
