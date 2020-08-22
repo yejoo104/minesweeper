@@ -16,9 +16,9 @@ void printarray (vector <vector <int> > board);
 int main()
 {
   string level;
-  int width = 10;
-  int height = 10;
-  int mines = 10;
+  int width = 36;
+  int height = 16;
+  int mines = 99;
 
   int w = 32;
   Texture t;
@@ -55,7 +55,7 @@ int main()
       for (int j = 0; j <= width; j++)
       {
         s.setTextureRect(IntRect(10 * w, 0, w, w));
-        s.setPosition(i * w, j * w);
+        s.setPosition(j * w, i * w);
         app.draw(s);
       }
 
@@ -63,14 +63,11 @@ int main()
   }
 
   // Initialize Board & Tracker after First Click
-  cout << firstrow << firstcol << endl;
   vector <vector <int> > tracker(height, vector<int>(width, -1));
   vector <vector <bool> > mineboard = makeboard(width, height, mines, firstrow, firstcol);
   tracker = updatetracker(tracker, mineboard, firstrow, firstcol);
 
-  printarray(tracker);
-  printarray(mineboard);
-
+  // Game runs while in loop
   while (app.isOpen())
   {
     Vector2i pos = Mouse::getPosition(app);
@@ -83,11 +80,40 @@ int main()
       if (e.type == Event::Closed) app.close();
     }
 
+    if (e.type == Event::MouseButtonPressed)
+      if (e.key.code == Mouse::Left)
+        if (mineboard[y][x]) break;
+        else tracker = updatetracker(tracker, mineboard, y, x);
+
     app.clear(Color::White);
     for (int i = 0; i < tracker.size(); i++)
       for (int j = 0; j < tracker[i].size(); j++)
       {
         if (tracker[i][j] == -1) s.setTextureRect(IntRect(10 * w, 0, w, w));
+        else s.setTextureRect(IntRect(tracker[i][j] * w, 0, w, w));
+        s.setPosition (j * w, i * w);
+        app.draw(s);
+      }
+
+    app.display();
+  }
+
+  // Print Final Board
+  while (app.isOpen())
+  {
+    Event e;
+    while (app.pollEvent(e))
+    {
+      if (e.type == Event::Closed) app.close();
+    }
+
+    app.clear(Color::White);
+    for (int i = 0; i < tracker.size(); i++)
+      for (int j = 0; j < tracker[i].size(); j++)
+      {
+        if (mineboard[i][j]) s.setTextureRect(IntRect(9 * w, 0, w, w));
+        else if (tracker[i][j] == -1) s.setTextureRect(IntRect(10 * w, 0, w, w));
+        else if (tracker[i][j] == 0) s.setTextureRect(IntRect(0, 0, w, w));
         else s.setTextureRect(IntRect(tracker[i][j] * w, 0, w, w));
         s.setPosition (j * w, i * w);
         app.draw(s);
