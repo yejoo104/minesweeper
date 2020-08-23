@@ -16,7 +16,7 @@ void printarray (vector <vector <int> > board);
 int main()
 {
   string level;
-  int width = 36;
+  int width = 30;
   int height = 16;
   int mines = 99;
 
@@ -74,17 +74,21 @@ int main()
     int x = pos.x / w;
     int y = pos.y / w;
 
+    bool gameover = false;
+
     Event e;
     while (app.pollEvent(e))
     {
       if (e.type == Event::Closed) app.close();
+
+      if (e.type == Event::MouseButtonPressed)
+        if (e.key.code == Mouse::Left)
+          if (mineboard[y][x]) gameover = true;
+          else tracker = updatetracker(tracker, mineboard, y, x);
     }
 
-    if (e.type == Event::MouseButtonPressed)
-      if (e.key.code == Mouse::Left)
-        if (mineboard[y][x]) break;
-        else tracker = updatetracker(tracker, mineboard, y, x);
-
+    if (gameover) break;
+    
     app.clear(Color::White);
     for (int i = 0; i < tracker.size(); i++)
       for (int j = 0; j < tracker[i].size(); j++)
