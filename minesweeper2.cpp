@@ -16,9 +16,9 @@ void printarray (vector <vector <int> > board);
 int main()
 {
   string level;
-  int width = 30;
-  int height = 16;
-  int mines = 99;
+  int width = 10;
+  int height = 10;
+  int mines = 10;
 
   int w = 32;
   Texture t;
@@ -90,17 +90,27 @@ int main()
 
     if (gameover) break;
 
+    int count = 0;
     app.clear(Color::White);
     for (int i = 0; i < tracker.size(); i++)
       for (int j = 0; j < tracker[i].size(); j++)
       {
-        if (tracker[i][j] == -1) s.setTextureRect(IntRect(10 * w, 0, w, w));
+        if (tracker[i][j] == -1)
+        {
+          s.setTextureRect(IntRect(10 * w, 0, w, w));
+          count++;
+        }
         else s.setTextureRect(IntRect(tracker[i][j] * w, 0, w, w));
         s.setPosition ((j + 1) * w, (i + 1) * w);
         app.draw(s);
       }
 
     app.display();
+
+    if (count == mines)
+    {
+      break;
+    }
   }
 
   // Print Final Board
