@@ -25,7 +25,7 @@ int main()
   t.loadFromFile("tiles.jpg");
   Sprite s(t);
 
-  RenderWindow app(VideoMode(w * width, w * height), "Minesweeper");
+  RenderWindow app(VideoMode(w * (width + 2), w * (height + 2)), "Minesweeper");
 
   // Display Board before Game Starts
   int firstrow;
@@ -33,8 +33,8 @@ int main()
   while (app.isOpen())
   {
     Vector2i pos = Mouse::getPosition(app);
-    int x = pos.x / w;
-    int y = pos.y / w;
+    int x = pos.x / w - 1;
+    int y = pos.y / w - 1;
 
     Event e;
     while (app.pollEvent(e))
@@ -51,11 +51,12 @@ int main()
           break;
         }
 
-    for (int i = 0; i <= height;i++)
-      for (int j = 0; j <= width; j++)
+    app.clear(Color::White);
+    for (int i = 0; i < height;i++)
+      for (int j = 0; j < width; j++)
       {
         s.setTextureRect(IntRect(10 * w, 0, w, w));
-        s.setPosition(j * w, i * w);
+        s.setPosition((j + 1) * w, (i + 1) * w);
         app.draw(s);
       }
 
@@ -71,8 +72,8 @@ int main()
   while (app.isOpen())
   {
     Vector2i pos = Mouse::getPosition(app);
-    int x = pos.x / w;
-    int y = pos.y / w;
+    int x = pos.x / w - 1;
+    int y = pos.y / w - 1;
 
     bool gameover = false;
 
@@ -88,14 +89,14 @@ int main()
     }
 
     if (gameover) break;
-    
+
     app.clear(Color::White);
     for (int i = 0; i < tracker.size(); i++)
       for (int j = 0; j < tracker[i].size(); j++)
       {
         if (tracker[i][j] == -1) s.setTextureRect(IntRect(10 * w, 0, w, w));
         else s.setTextureRect(IntRect(tracker[i][j] * w, 0, w, w));
-        s.setPosition (j * w, i * w);
+        s.setPosition ((j + 1) * w, (i + 1) * w);
         app.draw(s);
       }
 
@@ -119,7 +120,7 @@ int main()
         else if (tracker[i][j] == -1) s.setTextureRect(IntRect(10 * w, 0, w, w));
         else if (tracker[i][j] == 0) s.setTextureRect(IntRect(0, 0, w, w));
         else s.setTextureRect(IntRect(tracker[i][j] * w, 0, w, w));
-        s.setPosition (j * w, i * w);
+        s.setPosition ((j + 1) * w, (i + 1) * w);
         app.draw(s);
       }
 
