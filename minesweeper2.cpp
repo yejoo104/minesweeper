@@ -155,7 +155,7 @@ vector <vector <bool> > makeboard(int width, int height, int mines, int row, int
     int thisrow = heightdis(generator);
     int thiscolumn = widthdis(generator);
 
-    if (thisrow == row && thiscolumn == column) continue;
+    if (thisrow >= row - 1 && thisrow <= row + 1 && thiscolumn >= column - 1 && thiscolumn <= column + 1) continue;
 
     if (!board[thisrow][thiscolumn])
     {
